@@ -47,13 +47,11 @@ public class Switch : MonoBehaviour
 
     void OnMouseEnter()
     {
-        Debug.Log("OnMouseEnter");
         onMouse = true;
     }
 
     void OnMouseExit()
     {
-        Debug.Log("OnMouseExit");
         onMouse = false;
     }
 }
