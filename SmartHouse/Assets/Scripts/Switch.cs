@@ -3,18 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Net.Sockets;
 
 public class Switch : MonoBehaviour
 {
     public GameObject light;
     public GameObject ceilingLight;
-
     private bool onStay = false;
     private bool onMouse = false;
-    bool onOff = false;
+    bool onOff;
     void Start()
     {
-        
+        if (light.GetComponent<Light>().enabled == false)
+        {
+            ceilingLight.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
+            onOff = false;
+        }
+        else
+        {
+            ceilingLight.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", new Color(255f, 255f, 255f));
+            onOff = !onOff;
+        }
     }
 
     void Update()
