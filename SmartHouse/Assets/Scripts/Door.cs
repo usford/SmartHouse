@@ -20,7 +20,7 @@ public class Door : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Mouse0))
         {
-            door.GetComponent<Animation>().Play();
+            door.GetComponent<Animation>().Play("Door");
         }
     }
 }
