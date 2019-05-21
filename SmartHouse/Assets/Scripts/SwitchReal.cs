@@ -98,7 +98,7 @@ public class SwitchReal : MonoBehaviour
         if (value1 == 0) //Розетка включена
         {          
             //Debug.Log("Включена");
-            myLight.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.red);
+            myLight.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.white);
             ceilingLight.enabled = true;
         }
         else
@@ -130,7 +130,7 @@ public class SwitchReal : MonoBehaviour
         {
             //Debug.Log("Включена");
             lightWB.Send("{\"deviceId\":\"" + deviceId + "\",\"deviceType\":29,\"value1\":0,\"value2\":0}");
-            myLight.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.red);
+            myLight.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.white);
             ceilingLight.enabled = true;
         }
     }
