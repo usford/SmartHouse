@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class RoomsLightHelper : MonoBehaviour
 {
@@ -65,46 +66,52 @@ public class RoomsLightHelper : MonoBehaviour
 
     public void ValueChangeToggle()
     {
-        bool check;
-        check = GetComponentInChildren<Toggle>().isOn;
-        string name = GetComponentInChildren<Dropdown>().captionText.text;
-        GameObject go = GameObject.Find(name);
-        go.GetComponentInChildren<Light>().enabled = check;
-        GetComponent<AudioSource>().Play();
-
-        int i = 0;
-        foreach (Devices d in lightWB.devicesList.devices)
+        try
         {
-            if (d.deviceId == go.GetComponent<LampHelper>().DeviceId)
+            bool check;
+            check = GetComponentInChildren<Toggle>().isOn;
+            string name = GetComponentInChildren<Dropdown>().captionText.text;
+            GameObject go = GameObject.Find(name);
+            go.GetComponentInChildren<Light>().enabled = check;
+            GetComponent<AudioSource>().Play();
+
+            int i = 0;
+            foreach (Devices d in lightWB.devicesList.devices)
             {
-                indexDevice = i;
+                if (d.deviceId == go.GetComponent<LampHelper>().DeviceId)
+                {
+                    indexDevice = i;
+                }
+                i++;
             }
-            i++;
-        }
 
-        switch (check)
+            switch (check)
+            {
+                case true:
+                    lightWB.devicesList.devices[indexDevice].value1 = 1;
+                    value1 = 1;
+                    break;
+
+                case false:
+                    lightWB.devicesList.devices[indexDevice].value1 = 0;
+                    value1 = 0;
+                    break;
+
+            }
+
+            if (value1 == 0) //Розетка включена
+            {
+                Debug.Log("Выключена");
+                lightWB.Send("{\"deviceId\":\"" + go.GetComponent<LampHelper>().DeviceId + "\",\"deviceType\":29,\"value1\":1,\"value2\":0}");
+            }
+            else
+            {
+                Debug.Log("Включена");
+                lightWB.Send("{\"deviceId\":\"" + go.GetComponent<LampHelper>().DeviceId + "\",\"deviceType\":29,\"value1\":0,\"value2\":0}");
+            }
+        }catch(Exception)
         {
-            case true:
-                lightWB.devicesList.devices[indexDevice].value1 = 1;
-                value1 = 1;
-                break;
-
-            case false:
-                lightWB.devicesList.devices[indexDevice].value1 = 0;
-                value1 = 0;
-                break;
-
-        }
-
-        if (value1 == 0) //Розетка включена
-        {
-            Debug.Log("Выключена");
-            lightWB.Send("{\"deviceId\":\"" + go.GetComponent<LampHelper>().DeviceId + "\",\"deviceType\":29,\"value1\":1,\"value2\":0}");
-        }
-        else
-        {
-            Debug.Log("Включена");
-            lightWB.Send("{\"deviceId\":\"" + go.GetComponent<LampHelper>().DeviceId + "\",\"deviceType\":29,\"value1\":0,\"value2\":0}");
+            Debug.Log("Такого устройства не существует!");
         }
     }
 }

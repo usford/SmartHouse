@@ -41,6 +41,9 @@ public class LightWebSocket : MonoBehaviour
     public DevicesList devicesList = new DevicesList();
     public DeviceReport deviceReport = new DeviceReport();
 
+    private List<GameObject> lamps = new List<GameObject>();
+    private List<LampHelper> lh = new List<LampHelper>();
+
     delegate void CallBack(string msg);
     CallBack callback;
 
@@ -71,7 +74,17 @@ public class LightWebSocket : MonoBehaviour
         ws.OnClose += OnCloseHandler;
         
         switchesAll.AddRange(GameObject.FindGameObjectsWithTag("Switch"));
-        
+
+        lamps.AddRange(GameObject.FindGameObjectsWithTag("Lamp"));
+        foreach (GameObject go in lamps)
+        {
+            if (go.GetComponent<LampHelper>() != null)
+            {
+                lh.Add(go.GetComponent<LampHelper>());
+            }
+        }
+
+
         foreach (GameObject go in switchesAll)
         {
             if (go.GetComponent<SwitchReal>() != null)
@@ -165,6 +178,8 @@ public class LightWebSocket : MonoBehaviour
                     print("id устройства: " + deviceReport.deviceId);
                     print("value1: " + deviceReport.value1);
                     print("deviceType: " + deviceReport.deviceType);
+
+                   
                     foreach (Devices d in devicesList.devices)
                     {
                         if (d.deviceId == deviceReport.deviceId)
